@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Science & Art of Valuation — Avenir Research</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #080807;
+    --white: #f4f1eb;
+    --gold: #c9a035;
+    --gold-light: #e8c96a;
+    --gray: #6a6660;
+    --gray-light: #b0aca4;
+    --border: rgba(201,160,53,0.18);
+    --surface: rgba(255,255,255,0.025);
+  }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--black); color: var(--white);
+    font-family: 'DM Sans', sans-serif; font-weight: 300;
+    line-height: 1.7; overflow-x: hidden;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 22px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: all 0.4s ease;
+  }
+  nav.scrolled {
+    background: rgba(8,8,7,0.95); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-brand { display: flex; flex-direction: column; }
+  .nav-series { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); opacity: 0.7; }
+  .nav-name { font-family: 'Playfair Display', serif; font-size: 15px; color: var(--white); }
+  .nav-btn {
+    background: var(--gold); color: var(--black);
+    padding: 10px 26px; font-size: 12px; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    text-decoration: none; transition: all 0.3s ease;
+  }
+  .nav-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid; grid-template-columns: 1fr 1fr;
+    align-items: center; padding: 130px 48px 80px; gap: 60px;
+    position: relative; z-index: 1;
+  }
+  .hero::after {
+    content: ''; position: absolute; top: 30%; right: 5%;
+    width: 420px; height: 420px;
+    background: radial-gradient(circle, rgba(201,160,53,0.07) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero-left { max-width: 560px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--gold); border: 1px solid var(--border);
+    padding: 7px 14px; margin-bottom: 36px;
+    opacity: 0; animation: fadeUp 0.7s ease 0.1s forwards;
+  }
+  .hero-badge span { width: 5px; height: 5px; background: var(--gold); border-radius: 50%; }
+  .hero-h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(40px, 4.5vw, 62px); font-weight: 700;
+    line-height: 1.08; letter-spacing: -0.02em;
+    opacity: 0; animation: fadeUp 0.7s ease 0.25s forwards;
+  }
+  .hero-h1 .gold { color: var(--gold); }
+  .hero-h1 .italic { font-style: italic; }
+  .hero-tagline {
+    font-size: 13px; color: var(--gray-light); letter-spacing: 0.04em;
+    border-left: 2px solid var(--gold); padding-left: 16px;
+    margin: 24px 0;
+    opacity: 0; animation: fadeUp 0.7s ease 0.4s forwards;
+  }
+  .hero-desc {
+    font-size: 15px; color: var(--gray); line-height: 1.8; margin-bottom: 44px;
+    opacity: 0; animation: fadeUp 0.7s ease 0.55s forwards;
+  }
+  .hero-desc strong { color: var(--white); font-weight: 400; }
+  .hero-actions {
+    display: flex; align-items: center; gap: 32px;
+    opacity: 0; animation: fadeUp 0.7s ease 0.7s forwards;
+  }
+  .btn-buy {
+    background: var(--gold); color: var(--black);
+    padding: 17px 44px; font-size: 13px; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    text-decoration: none; display: inline-block;
+    transition: all 0.3s ease; overflow: hidden; position: relative;
+  }
+  .btn-buy::before {
+    content: ''; position: absolute; inset: 0;
+    background: rgba(255,255,255,0.12);
+    transform: translateX(-100%); transition: 0.3s ease;
+  }
+  .btn-buy:hover::before { transform: translateX(0); }
+  .btn-buy:hover { transform: translateY(-2px); box-shadow: 0 14px 40px rgba(201,160,53,0.35); }
+  .price-blk .amount { font-family: 'Playfair Display', serif; font-size: 30px; color: var(--gold); font-weight: 600; }
+  .price-blk .note { font-size: 11px; color: var(--gray); margin-top: 3px; letter-spacing: 0.04em; }
+
+  /* BOOK */
+  .hero-right {
+    display: flex; justify-content: center; align-items: center;
+    opacity: 0; animation: fadeLeft 1s ease 0.4s forwards;
+  }
+  .book-scene { position: relative; width: 310px; }
+  .book-3d {
+    width: 290px; height: 400px;
+    transform: rotateY(-22deg) rotateX(4deg);
+    transition: transform 0.6s ease; position: relative;
+  }
+  .book-3d:hover { transform: rotateY(-12deg) rotateX(2deg) scale(1.02); }
+  .book-face {
+    width: 100%; height: 100%;
+    background: linear-gradient(160deg, #181408 0%, #231c0e 50%, #181408 100%);
+    border: 1px solid rgba(201,160,53,0.25);
+    display: flex; flex-direction: column;
+    padding: 30px 26px; position: relative; overflow: hidden;
+    box-shadow: 22px 24px 60px rgba(0,0,0,0.85), -5px 0 14px rgba(0,0,0,0.5);
+  }
+  .book-face::before {
+    content: ''; position: absolute; top: 0; right: 0;
+    width: 55%; height: 55%;
+    border-left: 1px solid rgba(201,160,53,0.1);
+    border-bottom: 1px solid rgba(201,160,53,0.1);
+  }
+  .book-face::after {
+    content: ''; position: absolute; bottom: 0; left: 0;
+    width: 40%; height: 40%;
+    border-right: 1px solid rgba(201,160,53,0.1);
+    border-top: 1px solid rgba(201,160,53,0.1);
+  }
+  .bk-pub { font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); opacity: 0.6; margin-bottom: 24px; }
+  .bk-main { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .bk-the { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray-light); margin-bottom: 3px; }
+  .bk-sci { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--white); line-height: 1.1; }
+  .bk-and { font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray-light); margin: 5px 0; }
+  .bk-art { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 600; color: var(--white); }
+  .bk-of { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 400; color: var(--gray-light); font-style: italic; }
+  .bk-val { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--gold); line-height: 1; }
+  .bk-sub {
+    font-size: 8px; color: var(--gray-light); letter-spacing: 0.03em;
+    line-height: 1.55; margin-top: 14px; opacity: 0.75;
+    border-top: 1px solid rgba(201,160,53,0.14); padding-top: 12px;
+  }
+  .bk-author { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); opacity: 0.75; margin-top: 22px; }
+  .book-spine {
+    position: absolute; left: -20px; top: 2px;
+    width: 20px; height: calc(100% - 4px);
+    background: linear-gradient(to right, #0b0a06, #181408);
+    border: 1px solid rgba(201,160,53,0.15);
+  }
+  .book-glow {
+    position: absolute; bottom: -28px; left: 10%;
+    width: 80%; height: 28px;
+    background: radial-gradient(ellipse, rgba(201,160,53,0.2) 0%, transparent 70%);
+    filter: blur(12px);
+  }
+
+  /* METHODS STRIP */
+  .methods-strip {
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    padding: 24px 48px; display: flex; align-items: center;
+    overflow: hidden; position: relative; z-index: 1;
+  }
+  .methods-lbl {
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gold); white-space: nowrap;
+    padding-right: 28px; margin-right: 28px;
+    border-right: 1px solid var(--border);
+  }
+  .methods-track {
+    display: flex; animation: scroll 22s linear infinite;
+  }
+  .m-tag {
+    font-size: 11px; color: var(--gray-light); letter-spacing: 0.08em;
+    white-space: nowrap; padding: 0 20px;
+    border-right: 1px solid var(--border);
+  }
+  @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* SECTIONS */
+  .sec { padding: 100px 48px; position: relative; z-index: 1; }
+  .sec-tag { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 14px; }
+  .sec-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 3.5vw, 42px); font-weight: 600; line-height: 1.2; margin-bottom: 52px;
+  }
+
+  /* TOPICS */
+  .topics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+  .topic-card {
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 34px 30px; transition: all 0.3s ease;
+    opacity: 0; transform: translateY(18px);
+  }
+  .topic-card.in { opacity: 1; transform: translateY(0); }
+  .topic-card:hover { background: rgba(201,160,53,0.04); border-color: rgba(201,160,53,0.35); }
+  .t-num { font-family: 'Playfair Display', serif; font-size: 12px; color: var(--gold); opacity: 0.45; display: block; margin-bottom: 14px; }
+  .t-name { font-size: 14px; font-weight: 500; color: var(--white); margin-bottom: 10px; line-height: 1.35; }
+  .t-desc { font-size: 13px; color: var(--gray); line-height: 1.65; }
+
+  /* CASE STUDIES */
+  .cases-wrap {
+    background: rgba(201,160,53,0.02);
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  }
+  .cases-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
+  .c-item {
+    padding: 34px 26px; border-right: 1px solid var(--border);
+    opacity: 0; transform: translateY(14px); transition: all 0.5s ease;
+  }
+  .c-item.in { opacity: 1; transform: translateY(0); }
+  .c-item:last-child { border-right: none; }
+  .c-ticker { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 600; color: var(--gold); margin-bottom: 5px; }
+  .c-name { font-size: 12px; color: var(--gray-light); margin-bottom: 8px; }
+  .c-type { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray); }
+
+  /* FOR WHOM */
+  .for-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+  .for-card {
+    padding: 44px 34px; border-right: 1px solid var(--border);
+    opacity: 0; transform: translateY(14px); transition: all 0.5s ease;
+  }
+  .for-card.in { opacity: 1; transform: translateY(0); }
+  .for-card:last-child { border-right: none; }
+  .f-ico { width: 38px; height: 38px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 15px; margin-bottom: 18px; }
+  .f-title { font-size: 14px; font-weight: 500; margin-bottom: 10px; }
+  .f-desc { font-size: 13px; color: var(--gray); line-height: 1.65; }
+
+  /* AUTHOR */
+  .author-wrap {
+    display: grid; grid-template-columns: auto 1fr; gap: 64px; align-items: center;
+    border-top: 1px solid var(--border); padding: 80px 48px;
+    position: relative; z-index: 1;
+  }
+  .author-emblem {
+    width: 148px; height: 148px; border: 1px solid var(--border);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: var(--surface); position: relative; flex-shrink: 0;
+  }
+  .author-emblem::before { content: ''; position: absolute; inset: 7px; border: 1px solid rgba(201,160,53,0.1); }
+  .a-initial { font-family: 'Playfair Display', serif; font-size: 50px; color: var(--gold); font-weight: 600; line-height: 1; }
+  .a-sub { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray); margin-top: 6px; }
+  .a-name { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 600; margin-bottom: 6px; }
+  .a-handle { font-size: 13px; color: var(--gold); margin-bottom: 18px; }
+  .a-bio { font-size: 15px; color: var(--gray); line-height: 1.8; max-width: 580px; }
+
+  /* CTA */
+  .cta-sec {
+    padding: 120px 48px; text-align: center;
+    position: relative; z-index: 1;
+  }
+  .cta-sec::before {
+    content: ''; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 700px; height: 350px;
+    background: radial-gradient(ellipse, rgba(201,160,53,0.055) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .cta-tag { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 22px; opacity: 0; animation: fadeUp 0.7s ease 0.1s forwards; }
+  .cta-h {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(34px, 5vw, 56px); font-weight: 700; line-height: 1.12; margin-bottom: 18px;
+    opacity: 0; animation: fadeUp 0.7s ease 0.25s forwards;
+  }
+  .cta-h em { font-style: italic; color: var(--gold); }
+  .cta-p { font-size: 15px; color: var(--gray); max-width: 440px; margin: 0 auto 48px; opacity: 0; animation: fadeUp 0.7s ease 0.4s forwards; }
+  .cta-card {
+    display: inline-flex; flex-direction: column; align-items: center; gap: 18px;
+    background: var(--surface); border: 1px solid var(--border); padding: 44px 60px;
+    opacity: 0; animation: fadeUp 0.7s ease 0.55s forwards;
+  }
+  .cta-price-row { display: flex; align-items: baseline; gap: 8px; }
+  .cta-curr { font-size: 14px; color: var(--gray-light); }
+  .cta-amt { font-family: 'Playfair Display', serif; font-size: 42px; color: var(--gold); font-weight: 600; }
+  .btn-main {
+    background: var(--gold); color: var(--black);
+    padding: 18px 60px; font-size: 13px; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    text-decoration: none; display: inline-block; transition: all 0.3s ease;
+  }
+  .btn-main:hover { transform: translateY(-3px); box-shadow: 0 16px 48px rgba(201,160,53,0.35); }
+  .cta-note { font-size: 11px; color: var(--gray); display: flex; align-items: center; gap: 6px; }
+  .cta-note::before { content: '✓'; color: var(--gold); }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border); padding: 34px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+    position: relative; z-index: 1;
+  }
+  .f-brand { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); }
+  .f-copy { font-size: 11px; color: var(--gray); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeLeft { from { opacity: 0; transform: translateX(36px); } to { opacity: 1; transform: translateX(0); } }
+
+  /* RESPONSIVE */
+  @media (max-width: 960px) {
+    nav { padding: 18px 20px; }
+    .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; gap: 52px; }
+    .hero-right { order: -1; }
+    .methods-strip { padding: 18px 24px; }
+    .sec { padding: 60px 24px; }
+    .topics-grid { grid-template-columns: 1fr; }
+    .cases-grid { grid-template-columns: repeat(2, 1fr); }
+    .c-item:nth-child(2n) { border-right: none; }
+    .for-grid { grid-template-columns: 1fr; }
+    .for-card { border-right: none; border-bottom: 1px solid var(--border); }
+    .for-card:last-child { border-bottom: none; }
+    .author-wrap { grid-template-columns: 1fr; gap: 28px; padding: 60px 24px; }
+    .cta-sec { padding: 80px 24px; }
+    .cta-card { padding: 36px 28px; width: 100%; }
+    footer { padding: 28px 24px; flex-direction: column; gap: 10px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-brand">
+    <span class="nav-series">Avenir Research · Edisi 2026</span>
+    <span class="nav-name">The Science & Art of Valuation</span>
+  </div>
+  <a class="nav-btn" href="https://lynk.id/umarfkr" target="_blank">Beli — IDR 69.999</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-badge"><span></span>Avenir Research · Edisi 2026</div>
+    <h1 class="hero-h1">
+      The <span class="italic gold">Science</span><br>
+      &amp; Art of<br>
+      <span class="gold">Valuation</span>
+    </h1>
+    <p class="hero-tagline">Panduan Komprehensif Penilaian Saham dari Dasar hingga Praktik</p>
+    <p class="hero-desc">
+      Di tengah pasar yang sering digerakkan sentimen dan euforia jangka pendek, buku ini mengajak kamu kembali ke fondasi utama investasi: <strong>valuasi yang disiplin dan cara berpikir yang rasional.</strong> Dari DCF hingga LBO, dari BCA hingga Berkshire — semua dibahas tuntas dengan studi kasus nyata.
+    </p>
+    <div class="hero-actions">
+      <a href="https://lynk.id/umarfkr" target="_blank" class="btn-buy">Dapatkan Sekarang</a>
+      <div class="price-blk">
+        <div class="amount">IDR 69.999</div>
+        <div class="note">Download PDF · Lynk.id</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="book-scene">
+      <div class="book-3d" id="bookEl">
+        <div class="book-spine"></div>
+        <div class="book-face">
+          <div class="bk-pub">Avenir Research · Edisi 2026</div>
+          <div class="bk-main">
+            <div class="bk-the">The</div>
+            <div class="bk-sci">Science</div>
+            <div class="bk-and">and</div>
+            <div class="bk-art">Art of</div>
+            <div class="bk-val">Valuation</div>
+            <div class="bk-sub">
+              Panduan Komprehensif Penilaian Saham<br>
+              dari Dasar hingga Praktik<br><br>
+              DCF · DDM · EV/EBITDA · P/E · P/B<br>
+              NAV · Sum-of-Parts · LBO · Residual Income<br><br>
+              BCA · TLKM · BBRI · Astra · GoTo<br>
+              Apple · Berkshire Hathaway
+            </div>
+          </div>
+          <div class="bk-author">KangCilok, Plc</div>
+        </div>
+      </div>
+      <div class="book-glow"></div>
+    </div>
+  </div>
+</section>
+
+<!-- METHODS STRIP -->
+<div class="methods-strip">
+  <div class="methods-lbl">Metode Valuasi</div>
+  <div style="flex:1;overflow:hidden">
+    <div class="methods-track">
+      <span class="m-tag">DCF</span><span class="m-tag">DDM</span><span class="m-tag">EV/EBITDA</span>
+      <span class="m-tag">P/E Ratio</span><span class="m-tag">P/B Ratio</span><span class="m-tag">NAV</span>
+      <span class="m-tag">Sum-of-Parts</span><span class="m-tag">LBO</span>
+      <span class="m-tag">Residual Income</span><span class="m-tag">EV/Sales</span>
+      <span class="m-tag">DCF</span><span class="m-tag">DDM</span><span class="m-tag">EV/EBITDA</span>
+      <span class="m-tag">P/E Ratio</span><span class="m-tag">P/B Ratio</span><span class="m-tag">NAV</span>
+      <span class="m-tag">Sum-of-Parts</span><span class="m-tag">LBO</span>
+      <span class="m-tag">Residual Income</span><span class="m-tag">EV/Sales</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOPICS -->
+<section class="sec" id="topicsSec">
+  <span class="sec-tag">Apa yang Kamu Pelajari</span>
+  <h2 class="sec-title">Kuasai setiap metode valuasi<br>yang dipakai analis profesional</h2>
+  <div class="topics-grid" id="topicsGrid">
+    <div class="topic-card">
+      <span class="t-num">01</span>
+      <div class="t-name">Discounted Cash Flow (DCF)</div>
+      <div class="t-desc">Hitung nilai intrinsik perusahaan dari arus kas masa depan. Metode paling fundamental — cara Warren Buffett dan para value investor berpikir.</div>
+    </div>
+    <div class="topic-card">
+      <span class="t-num">02</span>
+      <div class="t-name">Relative Valuation: P/E, P/B, EV/EBITDA</div>
+      <div class="t-desc">Bandingkan valuasi antar perusahaan dengan cepat menggunakan market multiple. Pahami kapan sebuah saham "mahal" atau "murah" secara relatif.</div>
+    </div>
+    <div class="topic-card">
+      <span class="t-num">03</span>
+      <div class="t-name">Dividend Discount Model (DDM)</div>
+      <div class="t-desc">Model valuasi khusus untuk saham dividen. Wajib dipahami untuk analisis bank, utilitas, dan perusahaan mature seperti BCA dan BBRI.</div>
+    </div>
+    <div class="topic-card">
+      <span class="t-num">04</span>
+      <div class="t-name">NAV & Sum-of-Parts</div>
+      <div class="t-desc">Valuasi holding company dan konglomerat seperti Astra yang nilainya tersebar di banyak anak usaha. Metode yang sering luput dari perhatian investor ritel.</div>
+    </div>
+    <div class="topic-card">
+      <span class="t-num">05</span>
+      <div class="t-name">LBO & Residual Income</div>
+      <div class="t-desc">Cara berpikir private equity dan pendekatan nilai tambah ekonomis. Metode yang membedakan analisis amatir dari analisis institusional.</div>
+    </div>
+    <div class="topic-card">
+      <span class="t-num">06</span>
+      <div class="t-name">Membaca Laporan Keuangan</div>
+      <div class="t-desc">Analisis neraca, laba rugi, dan arus kas secara benar — karena model valuasi terbaik pun tak berguna jika input angkanya salah.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDIES -->
+<section class="sec cases-wrap" id="casesSec">
+  <span class="sec-tag">Studi Kasus Nyata</span>
+  <h2 class="sec-title">Dipraktikkan langsung<br>pada perusahaan nyata</h2>
+  <div class="cases-grid" id="casesGrid">
+    <div class="c-item"><div class="c-ticker">BBCA</div><div class="c-name">Bank Central Asia</div><div class="c-type">DDM · P/B</div></div>
+    <div class="c-item"><div class="c-ticker">TLKM</div><div class="c-name">Telkom Indonesia</div><div class="c-type">DCF · EV/EBITDA</div></div>
+    <div class="c-item"><div class="c-ticker">BBRI</div><div class="c-name">Bank Rakyat Indonesia</div><div class="c-type">Residual Income</div></div>
+    <div class="c-item"><div class="c-ticker">ASII</div><div class="c-name">Astra International</div><div class="c-type">Sum-of-Parts</div></div>
+    <div class="c-item"><div class="c-ticker">GOTO</div><div class="c-name">GoTo Group</div><div class="c-type">EV/Sales · DCF</div></div>
+    <div class="c-item"><div class="c-ticker">AAPL</div><div class="c-name">Apple Inc.</div><div class="c-type">P/E · FCF Yield</div></div>
+    <div class="c-item"><div class="c-ticker">BRK</div><div class="c-name">Berkshire Hathaway</div><div class="c-type">NAV · Buffett Method</div></div>
+    <div class="c-item"><div class="c-ticker" style="color:var(--gray-light)">+More</div><div class="c-name">Berbagai Sektor</div><div class="c-type">Indonesia & Global</div></div>
+  </div>
+</section>
+
+<!-- FOR WHOM -->
+<section class="sec" id="forSec">
+  <span class="sec-tag">Untuk Siapa</span>
+  <h2 class="sec-title">Untuk kamu yang ingin<br>berpikir seperti analis</h2>
+  <div class="for-grid">
+    <div class="for-card">
+      <div class="f-ico">◎</div>
+      <div class="f-title">Investor Pemula yang Serius</div>
+      <div class="f-desc">Baru mulai tapi ingin langsung belajar dengan cara yang benar — bukan sekadar ikut rekomendasi orang lain tanpa pemahaman fundamental.</div>
+    </div>
+    <div class="for-card">
+      <div class="f-ico">◈</div>
+      <div class="f-title">Investor yang Ingin Naik Level</div>
+      <div class="f-desc">Sudah invest beberapa tahun tapi belum punya kerangka analisis yang sistematis. Ingin tahu secara kuantitatif kapan saham mahal dan kapan murah.</div>
+    </div>
+    <div class="for-card">
+      <div class="f-ico">◇</div>
+      <div class="f-title">Mahasiswa & Profesional Keuangan</div>
+      <div class="f-desc">Belajar keuangan secara teori dan ingin melihat bagaimana valuasi diaplikasikan pada perusahaan nyata di pasar Indonesia dan global.</div>
+    </div>
+  </div>
+</section>
+
+<!-- AUTHOR -->
+<div class="author-wrap" id="authorSec">
+  <div class="author-emblem">
+    <div class="a-initial">K</div>
+    <div class="a-sub">KangCilok, Plc</div>
+  </div>
+  <div>
+    <div class="a-name">KangCilok, Plc</div>
+    <div class="a-handle">Avenir Research</div>
+    <p class="a-bio">Praktisi investasi yang menggabungkan pendekatan akademis dengan pengalaman nyata di pasar modal. Disusun dengan pendekatan yang mudah dipahami namun tetap rigorous — buku ini merangkum framework valuasi yang digunakan investor dan analis profesional, diterapkan pada perusahaan-perusahaan yang sudah kamu kenal.</p>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-sec">
+  <span class="cta-tag">Mulai Investasi Lebih Cerdas</span>
+  <h2 class="cta-h">Valuasi bukan sekadar angka.<br>Ini adalah <em>cara berpikir.</em></h2>
+  <p class="cta-p">Satu buku yang bisa kamu kembalikan setiap kali butuh referensi — seumur hidup.</p>
+  <div class="cta-card">
+    <div class="cta-price-row">
+      <span class="cta-curr">IDR</span>
+      <span class="cta-amt">69.999</span>
+    </div>
+    <a href="https://lynk.id/umarfkr" target="_blank" class="btn-main">Beli Ebook Sekarang →</a>
+    <span class="cta-note">Download PDF langsung setelah pembayaran</span>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-brand">Avenir Research · 2026</div>
+  <div class="f-copy">lynk.id/umarfkr</div>
+</footer>
+
+<script>
+  // Navbar scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('in'), e.target.dataset.d || 0);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.topic-card').forEach((el, i) => { el.dataset.d = i * 70; io.observe(el); });
+  document.querySelectorAll('.c-item').forEach((el, i) => { el.dataset.d = i * 55; io.observe(el); });
+  document.querySelectorAll('.for-card').forEach((el, i) => { el.dataset.d = i * 80; io.observe(el); });
+
+  // Book float
+  let t = 0;
+  const bk = document.getElementById('bookEl');
+  (function float() {
+    t += 0.012;
+    bk.style.transform = `rotateY(-22deg) rotateX(${4 + Math.sin(t * 0.6) * 2}deg) translateY(${Math.sin(t) * 8}px)`;
+    requestAnimationFrame(float);
+  })();
+</script>
+</body>
+</html>
